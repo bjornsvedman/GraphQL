@@ -1,0 +1,7 @@
+{
+  "github.copilot.chat.commitMessageGeneration.instructions": [
+    "Use Conventional Commits format: <type>(optional-scope): <description>.",
+    "Choose feat for new behavior, fix for bug fixes, docs for documentation-only changes, test for test-only changes, style for formatting-only changes, and chore for maintenance or project setup.",
+    "Keep the subject concise and imperative. Add a body only when it clarifies the change."
+  ]
+}

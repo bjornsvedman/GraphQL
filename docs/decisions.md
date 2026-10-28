@@ -4,9 +4,13 @@
 
 Use .NET 10 even if it must be installed. It is the requested latest LTS target.
 
-## 2026-10-26: Defer real AI integration
+## 2026-10-26: Initially defer real AI integration (superseded 2026-10-28)
 
-The project is AI-assisted in how it is developed, but the application will not call an AI model yet. Use a deterministic stub for the initial API workflow.
+The initial implementation used a deterministic stub while real AI integration was deferred. This decision was superseded when local Ollama was approved as the first provider.
+
+## 2026-10-28: Use local Ollama behind `IChatClient`
+
+The first real model provider is local Ollama, integrated through `Microsoft.Extensions.AI.IChatClient`. Keep provider-specific setup at the dependency-injection boundary so Azure or Google can be considered later without coupling GraphQL resolvers or application behavior to their SDKs. Hosted providers and their costs/credentials remain out of scope.
 
 ## 2026-10-26: Keep the first architecture lightweight
 

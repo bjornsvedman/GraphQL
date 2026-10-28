@@ -5,8 +5,11 @@ namespace AiGraphqlApi.GraphQL;
 
 public sealed class Mutation
 {
-    public string Generate(string prompt, [Service] GenerationService generationService)
+    public Task<string> Generate(
+        string prompt,
+        [Service] GenerationService generationService,
+        CancellationToken cancellationToken)
     {
-        return generationService.Generate(prompt);
+        return generationService.GenerateAsync(prompt, cancellationToken);
     }
 }

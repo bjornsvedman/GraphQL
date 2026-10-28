@@ -1,5 +1,10 @@
 using System.Net.Http.Json;
+using AiGraphqlApi.Tests.Fakes;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.AI;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace AiGraphqlApi.Tests;
 
@@ -20,9 +25,14 @@ public sealed class GraphQlEndpointTests
     }
 
     [Fact]
-    public async Task GenerateMutation_ReturnsDeterministicStubResponse()
+    public async Task GenerateMutation_UsesInjectedChatClient()
     {
-        using var factory = new WebApplicationFactory<Program>();
+        using var factory = new WebApplicationFactory<Program>()
+            .WithWebHostBuilder(builder => builder.ConfigureTestServices(services =>
+            {
+                services.RemoveAll<IChatClient>();
+                services.AddSingleton<IChatClient>(new FakeChatClient());
+            }));
         using var client = factory.CreateClient();
         using var response = await client.PostAsJsonAsync(
             "/graphql",

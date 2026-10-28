@@ -3,7 +3,8 @@
 ## Project
 
 - This is a learning project for a GraphQL API in .NET 10 using Hot Chocolate.
-- Real AI integration is deferred. Keep any initial AI-shaped interface backed by a deterministic local stub; do not call hosted AI services or require API keys.
+- Use local Ollama for AI calls in the current milestone; do not call hosted AI services or require API keys.
+- Keep application behavior provider-neutral through `Microsoft.Extensions.AI.IChatClient`; isolate provider-specific setup in dependency injection so Azure or Google adapters can be added later.
 - Read `docs/plan.md` for scope and `docs/decisions.md` for settled choices before changing architecture.
 
 ## Working Style

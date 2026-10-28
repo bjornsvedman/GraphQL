@@ -17,7 +17,7 @@ Learn to build a small GraphQL API in .NET 10 with GitHub Copilot as a developme
 - [x] Add workspace-level Copilot instructions and this plan.
 - [x] Add Hot Chocolate and expose a health query.
 - [x] Add a deterministic stub-backed `generate(prompt)` mutation and focused tests.
-- [ ] Review the workflow and refine instructions based on where Copilot needed correction.
+- [x] Review the workflow and refine instructions based on where Copilot needed correction. Added guidance to verify version-sensitive tooling details; kept one-off Postman and VS Code UI troubleshooting out of project coding rules.
 - [ ] Later: replace the stub with local Ollama; keep this out of the current implementation.
 
 ## Development Loop

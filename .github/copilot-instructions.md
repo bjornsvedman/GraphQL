@@ -12,6 +12,7 @@
 - Prefer the smallest change that satisfies the current plan item. Do not add packages, abstractions, or infrastructure without explaining why.
 - Preserve existing user changes and avoid unrelated cleanup.
 - Explain relevant trade-offs so the user can learn the reasoning, not just receive code.
+- Verify version-sensitive tooling guidance against the installed version or official docs; state uncertainty instead of guessing.
 
 ## Engineering
 

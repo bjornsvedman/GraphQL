@@ -2,15 +2,18 @@ using Microsoft.Extensions.AI;
 
 namespace AiGraphqlApi.Tests.Fakes;
 
-public sealed class FakeChatClient : IChatClient
+public sealed class FakeChatClient(string? responseText = null) : IChatClient
 {
+    public int RequestCount { get; private set; }
+
     public Task<ChatResponse> GetResponseAsync(
         IEnumerable<ChatMessage> messages,
         ChatOptions? options = null,
         CancellationToken cancellationToken = default)
     {
-        var prompt = messages.Single(message => message.Role == ChatRole.User).Text;
-        var response = new ChatMessage(ChatRole.Assistant, $"Stub response: {prompt}");
+        RequestCount++;
+        var prompt = messages.Last(message => message.Role == ChatRole.User).Text;
+        var response = new ChatMessage(ChatRole.Assistant, responseText ?? $"Stub response: {prompt}");
 
         return Task.FromResult(new ChatResponse(response));
     }

@@ -55,6 +55,21 @@ Create a `POST` request to `http://localhost:5051/graphql`. Choose **Body → ra
 
 The generated answer is returned in `data.generate`. You can also check the API with this query:
 
+Classify text with the local model:
+
+```json
+{
+  "query": "mutation ($text: String!) { classifySentiment(text: $text) }",
+  "variables": {
+    "text": "The app crashes every time I open it."
+  }
+}
+```
+
+The result is one of `POSITIVE`, `NEUTRAL`, or `NEGATIVE` in `data.classifySentiment`.
+
+You can check the API with this query:
+
 ```json
 {
   "query": "{ health }"

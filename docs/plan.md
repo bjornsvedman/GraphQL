@@ -20,6 +20,7 @@ Learn to build a small GraphQL API in .NET 10 with GitHub Copilot as a developme
 - [x] Review the workflow and refine instructions based on where Copilot needed correction. Added guidance to verify version-sensitive tooling details; kept one-off Postman and VS Code UI troubleshooting out of project coding rules.
 - [x] Replace the echo implementation with async `IChatClient` generation, configure the local Ollama adapter, and keep automated tests provider-neutral and offline.
 - [x] Install Ollama, pull the configured model, and verify live generation against the local server.
+- [x] Add local-model sentiment classification with an enum result, offline tests, and a small manual evaluation set. Seven offline tests pass; the six-example live evaluation scored 6/6 with `qwen3:4b`.
 
 ## Local Ollama Milestone
 
@@ -49,6 +50,16 @@ Status: complete. Provider-neutral async service, Ollama configuration, offline 
 ### Later
 
 Add Azure or Google only when requested. Each should provide an `IChatClient` adapter selected through configuration; verify feature support and pricing before enabling it. Model-specific capabilities may prevent a pure configuration-only swap.
+
+## Sentiment Classification Milestone
+
+Status: complete. The six-example local evaluation scored 6/6 with `qwen3:4b`.
+
+- Add `classifySentiment(text)` returning `POSITIVE`, `NEUTRAL`, or `NEGATIVE` as a GraphQL enum.
+- Reject blank input and reject model output that is not exactly one of the supported labels after trimming and case normalization.
+- Keep the implementation behind `IChatClient`; leave `generate(prompt)`, provider configuration, and package references unchanged.
+- Test valid labels, invalid output, and blank input with the offline fake client.
+- Manually evaluate six fixed examples (two per label) against Ollama. Keep live-model evaluation out of automated tests.
 
 ## Development Loop
 

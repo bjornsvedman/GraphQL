@@ -12,4 +12,12 @@ public sealed class Mutation
     {
         return generationService.GenerateAsync(prompt, cancellationToken);
     }
+
+    public Task<Sentiment> ClassifySentiment(
+        string text,
+        [Service] GenerationService generationService,
+        CancellationToken cancellationToken)
+    {
+        return generationService.ClassifySentimentAsync(text, cancellationToken);
+    }
 }

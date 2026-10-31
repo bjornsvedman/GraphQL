@@ -15,6 +15,7 @@ builder.Services
 	.AddGraphQLServer()
 	.AddQueryType<Query>()
 	.AddMutationType<Mutation>()
+	.AddType<SentimentType>()
 	.ModifyRequestOptions(options =>
 		options.ExecutionTimeout = TimeSpan.FromSeconds(
 			builder.Configuration.GetValue<int>("GraphQL:ExecutionTimeoutSeconds", 120)));

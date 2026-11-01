@@ -1,3 +1,4 @@
+using AiGraphqlApi.Observability;
 using Microsoft.Extensions.AI;
 
 namespace AiGraphqlApi.Services;
@@ -8,30 +9,64 @@ public sealed class GenerationService(IChatClient chatClient)
 
     public async Task<string> GenerateAsync(string prompt, CancellationToken cancellationToken)
     {
-        var response = await chatClient.GetResponseAsync(
-            [new ChatMessage(ChatRole.User, prompt)],
-            cancellationToken: cancellationToken);
+        var startedAt = System.Diagnostics.Stopwatch.GetTimestamp();
+        var outcome = "failure";
 
-        return response.Text ?? string.Empty;
+        try
+        {
+            var response = await chatClient.GetResponseAsync(
+                [new ChatMessage(ChatRole.User, prompt)],
+                cancellationToken: cancellationToken);
+
+            outcome = "success";
+            return response.Text ?? string.Empty;
+        }
+        catch (OperationCanceledException)
+        {
+            outcome = "cancelled";
+            throw;
+        }
+        finally
+        {
+            ApiMetrics.RecordAiRequest("generate", outcome, System.Diagnostics.Stopwatch.GetElapsedTime(startedAt));
+        }
     }
 
     public async Task<Sentiment> ClassifySentimentAsync(string text, CancellationToken cancellationToken)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(text);
 
-        var response = await chatClient.GetResponseAsync(
-            [
-                new ChatMessage(ChatRole.System, SentimentInstructions),
-                new ChatMessage(ChatRole.User, text)
-            ],
-            cancellationToken: cancellationToken);
+        var startedAt = System.Diagnostics.Stopwatch.GetTimestamp();
+        var outcome = "failure";
 
-        return response.Text?.Trim().ToUpperInvariant() switch
+        try
         {
-            "POSITIVE" => Sentiment.Positive,
-            "NEUTRAL" => Sentiment.Neutral,
-            "NEGATIVE" => Sentiment.Negative,
-            _ => throw new InvalidOperationException("The model returned an invalid sentiment label.")
-        };
+            var response = await chatClient.GetResponseAsync(
+                [
+                    new ChatMessage(ChatRole.System, SentimentInstructions),
+                    new ChatMessage(ChatRole.User, text)
+                ],
+                cancellationToken: cancellationToken);
+
+            var sentiment = response.Text?.Trim().ToUpperInvariant() switch
+            {
+                "POSITIVE" => Sentiment.Positive,
+                "NEUTRAL" => Sentiment.Neutral,
+                "NEGATIVE" => Sentiment.Negative,
+                _ => throw new InvalidOperationException("The model returned an invalid sentiment label.")
+            };
+
+            outcome = "success";
+            return sentiment;
+        }
+        catch (OperationCanceledException)
+        {
+            outcome = "cancelled";
+            throw;
+        }
+        finally
+        {
+            ApiMetrics.RecordAiRequest("classify_sentiment", outcome, System.Diagnostics.Stopwatch.GetElapsedTime(startedAt));
+        }
     }
 }

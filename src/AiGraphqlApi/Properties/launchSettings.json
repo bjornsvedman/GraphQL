@@ -18,6 +18,17 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
+    },
+    "observability": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": false,
+      "applicationUrl": "http://localhost:5051",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "Observability__Prometheus__Enabled": "true",
+        "Observability__Prometheus__Endpoint": "http://localhost:9090/api/v1/otlp/v1/metrics"
+      }
     }
   }
 }

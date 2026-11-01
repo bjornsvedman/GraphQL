@@ -87,6 +87,32 @@ dotnet test AiGraphqlApi.sln
 
 The tests inject a fake `IChatClient`, so they do not require Ollama or network access.
 
+## Local observability
+
+Start Docker Desktop, then start Prometheus and Grafana from the repository root:
+
+```powershell
+docker compose -f observability/compose.yaml up -d
+```
+
+Start the API with the opt-in metrics exporter:
+
+```powershell
+dotnet run --project src/AiGraphqlApi/AiGraphqlApi.csproj --launch-profile observability
+```
+
+The API sends OpenTelemetry metrics to Prometheus' OTLP receiver. The provisioned Grafana dashboard is at `http://localhost:3000` (first login: `admin` / `admin`; Grafana asks you to change the password). Prometheus is at `http://localhost:9090`.
+
+Metrics may take up to a minute to appear. Both container ports are bound to loopback only. To stop the API, press Ctrl+C; stop the containers with:
+
+```powershell
+docker compose -f observability/compose.yaml down
+```
+
+Prometheus and Grafana data persist in Docker volumes. To remove the stored local data as well, use `docker compose -f observability/compose.yaml down -v`.
+
+The metrics exporter is disabled in the default launch profiles. Do not expose the Prometheus receiver or Grafana ports publicly without adding appropriate access controls.
+
 ## Configuration
 
 Edit `src/AiGraphqlApi/appsettings.json` to change the Ollama endpoint, model, or GraphQL request timeout. Defaults are `http://localhost:11434`, `qwen3:4b`, and 120 seconds.

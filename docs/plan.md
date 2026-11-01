@@ -21,6 +21,7 @@ Learn to build a small GraphQL API in .NET 10 with GitHub Copilot as a developme
 - [x] Replace the echo implementation with async `IChatClient` generation, configure the local Ollama adapter, and keep automated tests provider-neutral and offline.
 - [x] Install Ollama, pull the configured model, and verify live generation against the local server.
 - [x] Add local-model sentiment classification with an enum result, offline tests, and a small manual evaluation set. Seven offline tests pass; the six-example live evaluation scored 6/6 with `qwen3:4b`.
+- [x] Add local OpenTelemetry metrics with Prometheus and Grafana dashboards; keep automated checks offline and preserve an Azure Monitor export path. Eight tests pass; live HTTP/AI metrics are present in Prometheus and Grafana provisioning is verified.
 
 ## Local Ollama Milestone
 
@@ -61,6 +62,14 @@ Status: complete. The six-example local evaluation scored 6/6 with `qwen3:4b`.
 - Test valid labels, invalid output, and blank input with the offline fake client.
 - Manually evaluate six fixed examples (two per label) against Ollama. Keep live-model evaluation out of automated tests.
 
+## Local Observability Milestone
+
+- Instrument GraphQL HTTP request count/status/duration, GraphQL execution errors, and AI operation count/outcome/duration using OpenTelemetry metrics.
+- Export metrics to Prometheus' OTLP receiver only through an opt-in launch profile. Keep exporter disabled by default and use bounded labels only; never record prompts, model output, or exception messages.
+- Run Prometheus and Grafana locally with Docker Compose; provision the data source and dashboard from repository files. Keep the API and Ollama on the host.
+- Test emitted metrics offline with a fake `IChatClient`; manual Docker/Grafana checks stay outside `dotnet test`.
+- Keep OpenTelemetry as the application instrumentation layer so Azure Monitor/Application Insights can be considered later by changing the exporter, not GraphQL or service code.
+
 ## Development Loop
 
 1. Pick one unchecked milestone or a small subtask.
@@ -72,4 +81,4 @@ Status: complete. The six-example local evaluation scored 6/6 with `qwen3:4b`.
 ## Out of Scope For Now
 
 - Hosted AI providers, embeddings, retrieval, and model tool calling.
-- Authentication, persistence, Docker, CI, and cloud deployment.
+- Logs, distributed tracing, alerts, authentication, persistence, CI, and cloud deployment.

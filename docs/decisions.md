@@ -19,3 +19,7 @@ Use a small service boundary between GraphQL resolvers and behavior so it can be
 ## 2026-10-26: Keep project guidance in the workspace
 
 Store Copilot customization under `.github/` so it is versioned with the project and available to future contributors.
+
+## 2026-11-01: Use OpenTelemetry metrics with local Prometheus and Grafana
+
+Instrument the API with provider-neutral OpenTelemetry metrics and use Prometheus' OTLP receiver plus Grafana for local dashboards. Docker Compose runs only Prometheus and Grafana; the API and Ollama remain host processes. Keep export opt-in and labels bounded so Azure Monitor/Application Insights remains a possible later exporter.
